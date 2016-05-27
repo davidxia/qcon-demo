@@ -1,0 +1,11 @@
+{
+  "command": [],
+  "env": {},
+  "ports": {
+    "http": {
+      "externalPort": null,
+      "internalPort": 4567,
+      "protocol": "tcp"
+    }
+  }
+}
