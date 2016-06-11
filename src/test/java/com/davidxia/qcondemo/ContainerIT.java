@@ -16,15 +16,14 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+import static com.google.common.base.MoreObjects.firstNonNull;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
 
 /**
- * A simple integration test that tests that the service can start and respond to
- * a request.
- * <p>
- * Extend this integration test with more tests specific to your service! We
- * recommend that you take a look a Cucumber for acceptance test definitions.</p>
+ * This integration test checks that the container AND service inside can start and respond
+ * to requests from outside the container. This test takes care of starting the container and
+ * tearing it down.
  */
 public class ContainerIT {
 
@@ -50,6 +49,7 @@ public class ContainerIT {
     // mapping and other settings are reused here in the tests. The image the job uses is the
     // one that was built in this Maven build.
     job = temporaryJobs.jobWithConfig(".helios/helios_job_config.json")
+        .env("CASSANDRA_HOST", firstNonNull(System.getenv("CASSANDRA_HOST"), "127.0.0.1"))
         .imageFromBuild()
         .deploy();
 
@@ -64,7 +64,7 @@ public class ContainerIT {
         .build();
 
     final Response response = client.newCall(request).execute();
-    assertThat(response.body().string(), equalTo("Hello World"));
+    assertThat(response.body().string(), equalTo("Hello, World"));
 
     final Request request2 = new Request.Builder()
         .url(endpoint + "/david")

@@ -10,11 +10,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
 
 /**
- * A simple integration test that tests that the service can start and respond to
- * a request.
- * <p>
- * Extend this integration test with more tests specific to your service! We
- * recommend that you take a look a Cucumber for acceptance test definitions.</p>
+ * This integration test checks that requests to the service's endpoints return the correct
+ * responses. Start the service before running this test.
  */
 public class ServiceIT {
 
@@ -27,6 +24,13 @@ public class ServiceIT {
         .build();
 
     final Response response = client.newCall(request).execute();
-    assertThat(response.body().string(), equalTo("Hello World"));
+    assertThat(response.body().string(), equalTo("Hello, World"));
+
+    final Request request2 = new Request.Builder()
+        .url("http://localhost:4567/David")
+        .build();
+
+    final Response response2 = client.newCall(request2).execute();
+    assertThat(response2.body().string(), equalTo("Hello, David"));
   }
 }
